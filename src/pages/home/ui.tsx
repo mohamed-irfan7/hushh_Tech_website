@@ -37,7 +37,7 @@ export default function HomePage() {
       <HushhTechHeader />
 
       {/* ═══ Main Content — max-w-md centered like all other pages ═══ */}
-      <main className="flex-1 px-6 pb-32 flex flex-col gap-12 pt-4 max-w-md mx-auto w-full">
+      <main className="flex-1 px-6 pb-32 flex flex-col gap-12 pt-4 max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full">
 
         {/* ── Hero ── */}
         <section className="py-4">
