@@ -357,6 +357,7 @@ function App() {
             <Route path='/receipt-generator' element={<ReceiptGeneratorPage />} />
             <Route path='/developer-docs' element={<DeveloperDocsPage />} />
             <Route path='/metrics' element={<MetricsPage />} />
+            <Route path='/hushh-hackathon' element={<HushhHackathonPage />} />
             <Route path='/metric' element={<Navigate to='/metrics' replace />} />
             <Route path='/hushh-ai' element={<HushhAIPage />} />
             <Route path='/hushh-ai/login' element={<HushhAILoginPage />} />
