@@ -78,6 +78,7 @@ import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider'
 import AuthRequiredRoute from './components/AuthRequiredRoute';
 import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
+import CookiePolicyPage from "./pages/cookie-policy/ui";
 
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
 
@@ -299,6 +300,7 @@ function App() {
               <KYCFormPage />
 
             } />
+            <Route path="/cookie-policy" element={<CookiePolicyPage />} />
             <Route path='/discover-fund-a' element={
 
               <DiscoverFundA />
