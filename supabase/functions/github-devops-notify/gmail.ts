@@ -8,7 +8,7 @@
 // Base64URL encoding utilities
 function base64urlEncode(data: Uint8Array | string): string {
   const bytes = typeof data === "string" ? new TextEncoder().encode(data) : data;
-  let base64 = btoa(String.fromCharCode(...bytes));
+  const base64 = btoa(String.fromCharCode(...bytes));
   return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 

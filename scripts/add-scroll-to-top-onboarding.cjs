@@ -37,7 +37,7 @@ steps.forEach(stepFile => {
   }
 
   // Find the first useEffect and add scroll-to-top before it
-  const useEffectRegex = /(\n  useEffect\(\(\) => \{)/;
+  const useEffectRegex = /(\n {2}useEffect\(\(\) => \{)/;
   
   if (useEffectRegex.test(content)) {
     content = content.replace(useEffectRegex, `\n${scrollToTopCode}$1`);

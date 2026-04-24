@@ -302,7 +302,7 @@ ${!isPaidAccess ? '- IMPORTANT: For contact information, you only have masked ve
     ]).then(() => {}).catch(console.error);
 
     // Calculate remaining messages/time
-    let accessInfo: any = {};
+    const accessInfo: any = {};
     if (token.access_type === 'free') {
       accessInfo.messagesRemaining = token.messages_limit - (token.messages_sent_count + 1);
       accessInfo.accessType = 'free';
