@@ -30,6 +30,6 @@ const LoadingSpinner = ({ size = 'md', fullPage = false }: LoadingSpinnerProps) 
   }
 
   return spinner
-}
+
 
 export default LoadingSpinner

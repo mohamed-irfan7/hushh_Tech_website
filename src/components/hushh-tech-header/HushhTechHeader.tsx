@@ -3,19 +3,20 @@
  * Always fixed to top of viewport. Includes spacer div to prevent
  * content from hiding behind it.
  *
- * Left: Hushh logo + brand name. Right: hamburger menu button.
+ * Left: Hushh logo + brand name. Right: dark mode toggle + hamburger menu button.
  * Below: Scrolling stock ticker with live quotes (Google, Apple, etc.)
  */
 import React, { useState } from "react";
 import hushhLogo from "../images/Hushhogo.png";
 import HushhTechNavDrawer from "../hushh-tech-nav-drawer/HushhTechNavDrawer";
 import { useStockQuotes, StockQuote } from "../../hooks/useStockQuotes";
+import { useDarkMode } from "../../hooks/useDarkMode";
 
 /* ── Chip-based ticker component — matches Navbar design ── */
 const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boolean }) => (
-  <div className="group flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-white border border-gray-200 shadow-sm pl-1.5 pr-3 hover:shadow-md transition-all">
+  <div className="group flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm pl-1.5 pr-3 hover:shadow-md transition-all">
     {/* Logo circle */}
-    <div className="flex w-6 h-6 items-center justify-center rounded-full bg-gray-100 shrink-0 overflow-hidden">
+    <div className="flex w-6 h-6 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 shrink-0 overflow-hidden">
       {quote.logo ? (
         <img
           src={quote.logo}
@@ -25,14 +26,14 @@ const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boole
           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
         />
       ) : (
-        <span className="text-[9px] font-bold text-gray-600">
+        <span className="text-[9px] font-bold text-gray-600 dark:text-gray-300">
           {quote.displaySymbol.charAt(0)}
         </span>
       )}
     </div>
 
     {/* Symbol */}
-    <span className="text-[11px] font-bold text-gray-800 leading-none">
+    <span className="text-[11px] font-bold text-gray-800 dark:text-gray-200 leading-none">
       {quote.displaySymbol}
     </span>
 
@@ -58,6 +59,7 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
   className = "",
 }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { isDark, toggle } = useDarkMode();
 
   // Fetch real-time stock quotes (refreshes every 2 minutes)
   const { quotes, loading: quotesLoading, lastUpdated } = useStockQuotes(120000);
@@ -66,9 +68,9 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
     <>
       {/* Fixed header — always pinned to top */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-sm ${className}`}
+        className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm transition-colors duration-300 ${className}`}
       >
-        {/* ── Top bar: Logo + Hamburger ── */}
+        {/* ── Top bar: Logo + Dark Mode Toggle + Hamburger ── */}
         <div className="px-6 py-4 flex justify-between items-center">
           {/* Logo + Brand */}
           <div className="flex items-center gap-3">
@@ -80,31 +82,45 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-[18px] font-bold tracking-tight text-gray-900">
+              <span className="text-[18px] font-bold tracking-tight text-gray-900 dark:text-white">
                 hushh
               </span>
-              <span className="text-[11px] font-medium tracking-[0.08em] text-gray-400 uppercase">
+              <span className="text-[11px] font-medium tracking-[0.08em] text-gray-400 dark:text-gray-500 uppercase">
                 Technologies
               </span>
             </div>
           </div>
 
-          {/* Hamburger menu button */}
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:bg-black/80 transition-colors"
-            aria-label="Open menu"
-            tabIndex={0}
-          >
-            <span className="material-symbols-outlined text-white !text-[1.2rem]">
-              menu
-            </span>
-          </button>
+          {/* Right side buttons */}
+          <div className="flex items-center gap-2">
+            {/* Dark mode toggle button */}
+            <button
+              onClick={toggle}
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              <span className="material-symbols-outlined text-gray-700 dark:text-gray-200 !text-[1.2rem]">
+                {isDark ? "light_mode" : "dark_mode"}
+              </span>
+            </button>
+
+            {/* Hamburger menu button */}
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="w-10 h-10 rounded-full bg-black dark:bg-white flex items-center justify-center hover:bg-black/80 dark:hover:bg-white/80 transition-colors"
+              aria-label="Open menu"
+              tabIndex={0}
+            >
+              <span className="material-symbols-outlined text-white dark:text-black !text-[1.2rem]">
+                menu
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* ── Stock Ticker Strip — below header nav ── */}
         {showTicker && (
-          <section className="relative w-full bg-[#F8F9FA] py-2 border-t border-b border-gray-200">
+          <section className="relative w-full bg-[#F8F9FA] dark:bg-gray-800 py-2 border-t border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
             {/* Fade-masked marquee */}
             <div className="hushh-ticker-mask relative flex w-full overflow-hidden">
               <div className="hushh-ticker-track flex items-center gap-2.5 px-3">
@@ -131,7 +147,7 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
             {lastUpdated && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[9px] font-medium text-gray-400">
+                <span className="text-[9px] font-medium text-gray-400 dark:text-gray-500">
                   {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
@@ -141,7 +157,6 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
       </header>
 
       {/* Spacer — prevents content from hiding behind the fixed header */}
-      {/* Nav bar ~72px + ticker strip ~49px = ~121px when ticker shown */}
       <div className={showTicker ? "h-[121px]" : "h-[72px]"} />
 
       {/* Navigation Drawer */}
