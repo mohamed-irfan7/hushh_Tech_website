@@ -76,10 +76,13 @@ import DocumentViewerPage from './pages/document-viewer';
 import NDAAdminPage from './pages/nda-admin';
 import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider';
 import AuthRequiredRoute from './components/AuthRequiredRoute';
-import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
+import NotFoundPage from './pages/not-found/ui';
+
+
 
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
+
 
 // Content wrapper component that applies conditional margin
 const ContentWrapper = ({ children }: { children: ReactNode }) => {
@@ -154,7 +157,7 @@ function App() {
   const AppLayout = () => {
     const { showNavbar, showFooter, showMobileNav } = useLayoutVisibility();
     const { session } = useAuthSession();
-    
+
     return (
       <div className="min-h-screen flex flex-col">
         {showNavbar && <Navbar />}
@@ -382,6 +385,7 @@ function App() {
             <Route path='/document-viewer' element={<DocumentViewerPage />} />
             {/* NDA Admin Page - Password protected view of all NDA agreements */}
             <Route path='/nda-admin' element={<NDAAdminPage />} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </ContentWrapper>
         {showFooter && <Footer />}
