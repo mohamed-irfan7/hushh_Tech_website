@@ -77,8 +77,8 @@ import DocumentViewerPage from './pages/document-viewer';
 import NDAAdminPage from './pages/nda-admin';
 import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider';
 import AuthRequiredRoute from './components/AuthRequiredRoute';
-import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
+import BackToTop from './components/BackToTop'
 import NotFound from './pages/NotFound';
 
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
@@ -402,6 +402,7 @@ function App() {
         <Router>
           <GoogleAnalyticsRouteTracker />
           <ScrollToTop />
+          <BackToTop />
           <OnboardingShellAutoPadding />
           <GlobalNDAGate>
             <AppLayout />
