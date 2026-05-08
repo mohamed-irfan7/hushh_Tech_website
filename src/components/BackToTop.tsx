@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 const BackToTop: React.FC = () => {
   const [visible, setVisible] = useState(false)
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 300)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+  const handleScroll = useCallback(() => {
+    setVisible(window.scrollY > 300)
   }, [])
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>
+    const throttled = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(handleScroll, 100)
+    }
+    window.addEventListener('scroll', throttled)
+    return () => {
+      window.removeEventListener('scroll', throttled)
+      clearTimeout(timeout)
+    }
+  }, [handleScroll])
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
