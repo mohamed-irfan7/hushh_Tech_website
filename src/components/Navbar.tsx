@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiChevronDown, FiUser, FiTrash2, FiChevronDown as FiArrowDown } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
-import { Image, useToast, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
+import { Image, useToast, useBreakpointValue, useDisclosure, useColorMode } from "@chakra-ui/react";
 import hushhLogo from "../components/images/Hushhogo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import DeleteAccountModal from "./DeleteAccountModal";
@@ -18,7 +18,6 @@ const WELCOME_TOAST_USER_KEY = "showWelcomeToastUserId";
 const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boolean }) => {
   return (
     <div className="group flex h-10 shrink-0 items-center gap-2 rounded-full bg-white border border-gray-200 shadow-sm pl-2 pr-3.5 hover:shadow-md transition-all">
-      {/* Logo in gray circle */}
       <div className="flex w-7 h-7 items-center justify-center rounded-full bg-gray-100 shrink-0 overflow-hidden">
         {quote.logo ? (
           <img
@@ -33,9 +32,7 @@ const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boole
           <span className="text-[10px] font-bold text-gray-600">{quote.displaySymbol.charAt(0)}</span>
         )}
       </div>
-      {/* Stock symbol - use displaySymbol for cleaner display */}
       <span className="text-[12px] font-bold text-gray-800 leading-none">{quote.displaySymbol}</span>
-      {/* Percent change with arrow */}
       <div className={`ml-0.5 flex items-center gap-0.5 ${quote.isUp ? 'text-green-600' : 'text-red-500'}`}>
         <span className="text-[10px]">{quote.isUp ? '▲' : '▼'}</span>
         <span className={`text-[11px] font-semibold ${isLoading ? 'animate-pulse' : ''}`}>
@@ -48,6 +45,7 @@ const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boole
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
+  const { colorMode, toggleColorMode } = useColorMode();
   const [isOpen, setIsOpen] = useState(false);
   const [toastShown, setToastShown] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
@@ -68,15 +66,11 @@ export default function Navbar() {
   const isDesktop = isMobile === false;
   const { session, user, status, signOut } = useAuthSession();
 
-  // Hide ticker strip on onboarding & profile pages to keep UX clean
   const isOnboarding = location.pathname.startsWith('/onboarding');
   const isProfilePage = location.pathname.startsWith('/hushh-user-profile');
   const hideTicker = isOnboarding || isProfilePage;
 
-  // Fetch real-time stock quotes (refreshes every 2 minutes for 27 stocks)
   const { quotes, loading: quotesLoading, lastUpdated } = useStockQuotes(120000);
-
-  // quotes already includes fallback data from the hook, so we can use it directly
   const displayQuotes = quotes;
 
   useEffect(() => {
@@ -91,29 +85,22 @@ export default function Navbar() {
     await signOut();
   };
 
-  // Show welcome toast when a user is signed in (only once)
-  // But skip if account was just deleted (to prevent showing welcome after deletion)
   useEffect(() => {
     if (!session || toastShown) return;
-
-    // Check if account was just deleted - if so, don't show welcome toast
     const accountJustDeleted = localStorage.getItem("accountJustDeleted");
     if (accountJustDeleted === "true") {
       localStorage.removeItem("accountJustDeleted");
       setToastShown(true);
       return;
     }
-
     const shouldShowWelcomeToast = sessionStorage.getItem(WELCOME_TOAST_PENDING_KEY) === "true";
     const pendingToastUserId = sessionStorage.getItem(WELCOME_TOAST_USER_KEY);
     const currentUserId = user?.id ?? null;
     const isPendingForCurrentUser = shouldShowWelcomeToast && (!pendingToastUserId || pendingToastUserId === currentUserId);
-
     if (!isPendingForCurrentUser) {
       setToastShown(true);
       return;
     }
-    
     toast({
       title: t('common.welcome'),
       description: t('common.signInMessage'),
@@ -126,7 +113,6 @@ export default function Navbar() {
     setToastShown(true);
   }, [session, toastShown, toast, t, user?.id]);
 
-  // Fetch Hushh Coins balance when authenticated
   useEffect(() => {
     if (!user?.id || !config.supabaseClient) { setHushhCoins(null); return; }
     const fetchCoins = async () => {
@@ -163,13 +149,11 @@ export default function Navbar() {
   const isActive = (path: string) => location.pathname === path;
 
   useEffect(() => {
-    // Handle click outside to close profile dropdown
     const handleClickOutside = (event: MouseEvent) => {
       if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
         setProfileDropdownOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -181,25 +165,20 @@ export default function Navbar() {
   };
 
   const handleAccountDeleted = () => {
-    // Reset states immediately for proper UI update
-    setToastShown(true); // Prevent welcome toast from showing
-    setIsOpen(false); // Close sidebar drawer immediately
+    setToastShown(true);
+    setIsOpen(false);
     onDeleteModalClose();
-    
-    // Navigate to home after a brief delay for cleanup
     setTimeout(() => {
       navigate("/");
     }, 100);
   };
 
-  // Handle scroll to check if user reached bottom of menu
   const handleMenuScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50;
     setShowScrollIndicator(!isNearBottom);
   }, []);
 
-  // Check if menu needs scroll indicator when drawer opens
   useEffect(() => {
     if (isOpen && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
@@ -212,21 +191,17 @@ export default function Navbar() {
     <>
       <SkipToContentLink />
 
-      {/* Fixed Header with Navigation + Ticker - Light Theme */}
       <header className="fixed w-full z-[999] top-0">
-        {/* Main Navigation Bar - Soft Light Background */}
         <nav className="flex w-full items-center justify-between bg-[#F8F9FA] px-4 lg:px-8 h-16 border-b border-gray-200 transition-colors duration-300">
           {/* Left: Brand Lockup */}
           <Link to="/" className="flex items-center gap-3">
-            {/* Hushh Logo Image in Circle with subtle gradient */}
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-200/50 shadow-sm shrink-0 overflow-hidden">
-              <Image 
-                src={hushhLogo} 
-                alt="Hushh Logo" 
+              <Image
+                src={hushhLogo}
+                alt="Hushh Logo"
                 className="w-7 h-7 object-contain"
               />
             </div>
-            {/* Brand Text - Stacked Layout */}
             <div className="flex flex-col">
               <span className="text-[18px] font-bold leading-none tracking-tight text-gray-900">Hushh</span>
               <span className="text-[13px] text-gray-500 font-medium mt-0.5">Technologies</span>
@@ -257,6 +232,17 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             {/* Language Selector */}
             <LanguageSwitcher variant="light" />
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleColorMode}
+              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+              aria-label="Toggle color mode"
+            >
+              <span className="material-symbols-outlined text-gray-700 !text-[1.2rem]">
+                {colorMode === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
 
             {/* Desktop Utility Actions */}
             {isDesktop && (
@@ -300,45 +286,40 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* Chip-based Ticker Strip - BELOW Navigation (hidden on onboarding & profile pages) */}
+        {/* Ticker Strip */}
         {!hideTicker && (
-        <section className="relative w-full bg-[#F8F9FA] py-2.5 border-b border-gray-200">
-          {/* Ticker Marquee with Fade Mask */}
-          <div className="ticker-mask relative flex w-full overflow-hidden">
-            <div className="ticker-track flex items-center gap-3 px-4">
-              {/* First set of tickers */}
-              {displayQuotes.map((quote, idx) => (
-                <TickerChip 
-                  key={`first-${quote.symbol}-${idx}`} 
-                  quote={quote} 
-                  isLoading={quotesLoading && quotes.length === 0}
-                />
-              ))}
-              {/* Duplicate for seamless loop */}
-              {displayQuotes.map((quote, idx) => (
-                <TickerChip 
-                  key={`second-${quote.symbol}-${idx}`} 
-                  quote={quote}
-                  isLoading={quotesLoading && quotes.length === 0}
-                />
-              ))}
+          <section className="relative w-full bg-[#F8F9FA] py-2.5 border-b border-gray-200">
+            <div className="ticker-mask relative flex w-full overflow-hidden">
+              <div className="ticker-track flex items-center gap-3 px-4">
+                {displayQuotes.map((quote, idx) => (
+                  <TickerChip
+                    key={`first-${quote.symbol}-${idx}`}
+                    quote={quote}
+                    isLoading={quotesLoading && quotes.length === 0}
+                  />
+                ))}
+                {displayQuotes.map((quote, idx) => (
+                  <TickerChip
+                    key={`second-${quote.symbol}-${idx}`}
+                    quote={quote}
+                    isLoading={quotesLoading && quotes.length === 0}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-
-          {/* Live Indicator - Small dot on right */}
-          {lastUpdated && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-[9px] font-medium text-gray-700">
-                {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            </div>
-          )}
-        </section>
+            {lastUpdated && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                <span className="text-[9px] font-medium text-gray-700">
+                  {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+            )}
+          </section>
         )}
       </header>
 
-      {/* Spacer for fixed header — shorter when ticker is hidden */}
+      {/* Spacer */}
       <div className={hideTicker ? "h-16" : "h-28"} />
 
       {/* iOS Native Side Menu */}
@@ -354,7 +335,6 @@ export default function Navbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col min-h-full max-w-md mx-auto w-full px-4 pb-10">
-              {/* Header: Menu title + Close button */}
               <div className="flex items-center justify-between pt-14 pb-4 px-0">
                 <h2 className="text-[34px] font-bold text-black tracking-tight leading-none">
                   {t('nav.menu', 'Menu')}
@@ -394,7 +374,6 @@ export default function Navbar() {
                     <svg className="w-[7px] h-[12px] text-[#C7C7CC] shrink-0" viewBox="0 0 7 12" fill="none">
                       <path d="M1 1L6 6L1 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    {/* Separator line (skip last item) */}
                     {idx < arr.length - 1 && (
                       <div className="absolute bottom-0 right-0 h-[0.5px] bg-[#C6C6C8]" style={{ width: 'calc(100% - 56px)', marginLeft: '56px' }} />
                     )}
@@ -432,7 +411,7 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Section 3: Hushh Coins — unlock CTA when 0, full card when > 0 */}
+              {/* Section 3: Hushh Coins */}
               {isAuthenticated && hushhCoins !== null && hushhCoins === 0 && (
                 <div className="bg-white rounded-[10px] overflow-hidden mb-5 shadow-sm">
                   <button
@@ -454,7 +433,6 @@ export default function Navbar() {
               )}
               {isAuthenticated && hushhCoins !== null && hushhCoins > 0 && (
                 <div className="rounded-[10px] overflow-hidden mb-5 shadow-sm">
-                  {/* Coins Balance Card — iOS Wallet style */}
                   <div className="bg-gradient-to-br from-[#1C1C1E] to-[#2C2C2E] p-4 rounded-t-[10px]">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -475,7 +453,6 @@ export default function Navbar() {
                       <p className="text-[12px] text-white/40 mt-1.5">≈ ${(hushhCoins / 100).toLocaleString()} value</p>
                     )}
                   </div>
-                  {/* Coins Actions — iOS grouped list style */}
                   <div className="bg-white rounded-b-[10px]">
                     <button
                       onClick={() => handleLinkClick("/onboarding/meet-ceo")}
@@ -506,7 +483,7 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Section 4: Profile & Account (only when authenticated) */}
+              {/* Section 4: Profile & Account */}
               {isAuthenticated && (
                 <div className="bg-white rounded-[10px] overflow-hidden mb-5 shadow-sm">
                   <button
@@ -538,7 +515,26 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Spacer to push logout to bottom */}
+              {/* Section 5: Dark Mode Toggle in Mobile Menu */}
+              <div className="bg-white rounded-[10px] overflow-hidden mb-5 shadow-sm">
+                <button
+                  onClick={toggleColorMode}
+                  className="flex items-center w-full min-h-[44px] py-2.5 pr-4 pl-4 active:bg-[#E5E5EA] transition-colors"
+                >
+                  <div className="w-[29px] h-[29px] rounded-[7px] bg-[#8E8E93] flex items-center justify-center mr-3 shrink-0">
+                    <span className="material-symbols-outlined text-white text-[18px]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 500" }}>
+                      {colorMode === 'dark' ? 'light_mode' : 'dark_mode'}
+                    </span>
+                  </div>
+                  <span className="text-[17px] text-black flex-grow text-left leading-none">
+                    {colorMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  </span>
+                  <svg className="w-[7px] h-[12px] text-[#C7C7CC] shrink-0" viewBox="0 0 7 12" fill="none">
+                    <path d="M1 1L6 6L1 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+
               <div className="flex-grow" />
 
               {/* Log Out / Login Button */}
@@ -567,54 +563,35 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Delete Account Modal */}
       <DeleteAccountModal
         isOpen={isDeleteModalOpen}
         onClose={onDeleteModalClose}
         onAccountDeleted={handleAccountDeleted}
       />
 
-      {/* Chip-based Ticker Styles */}
       <style>{`
-        /* Ticker mask for fade edges */
         .ticker-mask {
           mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
-        
-        /* Ticker animation */
         .ticker-track {
           display: flex;
           animation: ticker-scroll 40s linear infinite;
           width: max-content;
         }
-        
         @keyframes ticker-scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        
-        /* Pause animation on hover */
         .ticker-mask:hover .ticker-track {
           animation-play-state: paused;
         }
-        
-        /* Scroll indicator bounce animation */
         .scroll-indicator-arrow {
           animation: bounce-down 1.5s ease-in-out infinite;
         }
-        
         @keyframes bounce-down {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(4px);
-          }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(4px); }
         }
       `}</style>
     </>
