@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <div
       data-page="home"
-      className="bg-white antialiased text-gray-900 min-h-screen flex flex-col relative selection:bg-hushh-blue selection:text-white"
+      className="bg-white dark:bg-[#0a0a0a] antialiased text-gray-900 dark:text-gray-100 min-h-screen flex flex-col relative selection:bg-hushh-blue selection:text-white transition-colors duration-300"
     >
       <HushhTechHeader />
 
@@ -24,7 +24,7 @@ export default function HomePage() {
           <section className="grid grid-cols-1 gap-8 lg:min-h-[70vh] lg:grid-cols-2 lg:items-center lg:gap-12">
             <div className="flex flex-col justify-center py-4 lg:min-h-[58vh]">
               <h1
-                className="text-[2.75rem] leading-[1.1] font-normal text-black tracking-tight font-serif sm:text-[3.25rem] lg:text-[4rem]"
+                className="text-[2.75rem] leading-[1.1] font-normal text-black dark:text-white tracking-tight font-serif sm:text-[3.25rem] lg:text-[4rem] transition-colors duration-300"
                 style={playfair}
               >
                 Investing in <br /> the{" "}
@@ -140,7 +140,7 @@ export default function HomePage() {
           </section>
 
           <section className="mt-auto space-y-12 lg:space-y-16">
-            <div className="inline-block px-3 py-1 border border-hushh-blue/20 rounded-full bg-hushh-blue/5">
+            <div className="inline-block px-3 py-1 border border-hushh-blue/20 dark:border-hushh-blue/40 rounded-full bg-hushh-blue/5 dark:bg-hushh-blue/10">
               <span className="text-[10px] tracking-widest uppercase font-medium text-hushh-blue flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-hushh-blue rounded-full" />
                 AI-Powered Investing
@@ -148,34 +148,34 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-              <div className="bg-ios-gray-bg p-5 rounded-2xl border border-gray-200/60 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] hover:border-hushh-blue/30 transition-colors">
+              <div className="bg-ios-gray-bg dark:bg-[#151515] p-5 rounded-2xl border border-gray-200/60 dark:border-white/10 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] hover:border-hushh-blue/30 dark:hover:border-hushh-blue/50 transition-colors">
                 <span className="material-symbols-outlined thin-icon text-3xl mb-4 text-hushh-blue">
                   neurology
                 </span>
                 <div>
                   <h2
-                    className="text-lg font-medium mb-1 font-serif"
+                    className="text-lg font-medium mb-1 font-serif dark:text-white"
                     style={playfair}
                   >
                     AI-Powered
                   </h2>
-                  <p className="text-xs text-gray-500 font-light leading-relaxed sm:text-sm">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-light leading-relaxed sm:text-sm">
                     Institutional analytics processing millions of signals.
                   </p>
                 </div>
               </div>
-              <div className="bg-ios-gray-bg p-5 rounded-2xl border border-gray-200/60 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] hover:border-hushh-blue/30 transition-colors">
-                <span className="material-symbols-outlined thin-icon text-3xl mb-4 text-ios-dark">
+              <div className="bg-ios-gray-bg dark:bg-[#151515] p-5 rounded-2xl border border-gray-200/60 dark:border-white/10 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] hover:border-hushh-blue/30 dark:hover:border-hushh-blue/50 transition-colors">
+                <span className="material-symbols-outlined thin-icon text-3xl mb-4 text-ios-dark dark:text-gray-300">
                   supervised_user_circle
                 </span>
                 <div>
                   <h2
-                    className="text-lg font-medium mb-1 font-serif"
+                    className="text-lg font-medium mb-1 font-serif dark:text-white"
                     style={playfair}
                   >
                     Human-Led
                   </h2>
-                  <p className="text-xs text-gray-500 font-light leading-relaxed sm:text-sm">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-light leading-relaxed sm:text-sm">
                     Seasoned oversight ensuring long-term strategic vision.
                   </p>
                 </div>
