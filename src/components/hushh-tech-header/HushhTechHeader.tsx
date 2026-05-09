@@ -11,6 +11,7 @@ import hushhLogo from "../images/Hushhogo.png";
 import HushhTechNavDrawer from "../hushh-tech-nav-drawer/HushhTechNavDrawer";
 import { useStockQuotes, StockQuote } from "../../hooks/useStockQuotes";
 import { SkipToContentLink } from "../ui/SkipToContentLink";
+import ThemeToggle from "../ThemeToggle";
 
 /* ── Chip-based ticker component — matches Navbar design ── */
 const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boolean }) => (
@@ -96,17 +97,20 @@ const HushhTechHeader: React.FC<HushhTechHeaderProps> = ({
             </div>
           </div>
 
-          {/* Hamburger menu button */}
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:bg-black/80 transition-colors"
-            aria-label="Open menu"
-            tabIndex={0}
-          >
-            <span className="material-symbols-outlined text-white !text-[1.2rem]">
-              menu
-            </span>
-          </button>
+          {/* Theme Toggle & Hamburger menu button */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:bg-black/80 transition-colors"
+              aria-label="Open menu"
+              tabIndex={0}
+            >
+              <span className="material-symbols-outlined text-white !text-[1.2rem]">
+                menu
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* ── Stock Ticker Strip — below header nav ── */}
