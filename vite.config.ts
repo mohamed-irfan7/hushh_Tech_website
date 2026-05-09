@@ -63,6 +63,12 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+        bypass: (req) => {
+          // Prevent proxying internal source file imports that happen to start with /api
+          if (req.url && (req.url.endsWith('.js') || req.url.endsWith('.ts'))) {
+            return req.url;
+          }
+        }
       },
     },
   },
