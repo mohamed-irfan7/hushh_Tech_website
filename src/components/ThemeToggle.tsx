@@ -1,25 +1,35 @@
 import React from 'react';
-import { IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorMode } from '@chakra-ui/react';
 import { FiSun, FiMoon } from 'react-icons/fi';
 
 const ThemeToggle: React.FC = () => {
-  const { toggleColorMode } = useColorMode();
-  // We use useColorModeValue to dynamically switch the icon
-  // In light mode, it shows the Moon (to switch to dark)
-  // In dark mode, it shows the Sun (to switch to light)
-  const Icon = useColorModeValue(FiMoon, FiSun);
-  const ariaLabel = useColorModeValue('Switch to dark mode', 'Switch to light mode');
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDark = colorMode === 'dark';
 
   return (
-    <IconButton
-      aria-label={ariaLabel}
-      icon={<Icon size={20} />}
+    <button
       onClick={toggleColorMode}
-      variant="ghost"
-      colorScheme="gray"
-      borderRadius="full"
-      size="md"
-    />
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        border: '1px solid #E2E8F0',
+        background: 'transparent',
+        cursor: 'pointer',
+        color: isDark ? '#F6E05E' : '#4A5568',
+        flexShrink: 0,
+        transition: 'background 0.2s, color 0.2s',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = '#EDF2F7')}
+      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+    >
+      {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+    </button>
   );
 };
 
