@@ -6,6 +6,7 @@ import { Image, useToast, useBreakpointValue, useDisclosure } from "@chakra-ui/r
 import hushhLogo from "../components/images/Hushhogo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import DeleteAccountModal from "./DeleteAccountModal";
+import ThemeToggle from "./ThemeToggle";
 import { useStockQuotes, StockQuote, STOCK_LOGOS } from "../hooks/useStockQuotes";
 import config from "../resources/config/config";
 import { useAuthSession } from "../auth/AuthSessionProvider";
@@ -255,6 +256,7 @@ export default function Navbar() {
 
           {/* Right: Utilities */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             {/* Language Selector */}
             <LanguageSwitcher variant="light" />
 
