@@ -78,6 +78,8 @@ import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider'
 import AuthRequiredRoute from './components/AuthRequiredRoute';
 import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from './components/PageTransition';
 
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
 
@@ -154,12 +156,15 @@ function App() {
   const AppLayout = () => {
     const { showNavbar, showFooter, showMobileNav } = useLayoutVisibility();
     const { session } = useAuthSession();
+    const location = useLocation();
     
     return (
       <div className="min-h-screen flex flex-col">
         {showNavbar && <Navbar />}
         <ContentWrapper>
-          <Routes>
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Routes location={location}>
             <Route path="/" element={<HomePage />} />
             <Route path="/about/leadership" element={<Leadership />} />
             <Route path="/about/philosophy" element={<Philosophy />} />
@@ -382,7 +387,9 @@ function App() {
             <Route path='/document-viewer' element={<DocumentViewerPage />} />
             {/* NDA Admin Page - Password protected view of all NDA agreements */}
             <Route path='/nda-admin' element={<NDAAdminPage />} />
-          </Routes>
+              </Routes>
+            </PageTransition>
+          </AnimatePresence>
         </ContentWrapper>
         {showFooter && <Footer />}
         {showMobileNav && <MobileBottomNav />}
