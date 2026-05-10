@@ -9,6 +9,7 @@ import GoogleAnalyticsRouteTracker from './components/GoogleAnalyticsRouteTracke
 import LoginPage from './pages/login/ui'
 import Contact from './pages/Contact';
 import ScrollToTop from './components/ScrollToTop';
+import ScrollProgressButton from './components/ScrollProgressButton';
 import OnboardingShellAutoPadding from './components/OnboardingShellAutoPadding';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
@@ -386,6 +387,7 @@ function App() {
         </ContentWrapper>
         {showFooter && <Footer />}
         {showMobileNav && <MobileBottomNav />}
+        <ScrollProgressButton />
       </div>
     );
   };
