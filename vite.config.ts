@@ -62,6 +62,12 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+        bypass: (req) => {
+          // Do not proxy requests for shared source code files that the frontend imports
+          if (req.url && req.url.includes('/api/shared/')) {
+            return req.url;
+          }
+        }
       },
     },
   },
