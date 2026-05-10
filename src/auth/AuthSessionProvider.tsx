@@ -131,12 +131,20 @@ export const AuthSessionProvider: React.FC<{
   // This eliminates the 'booting' state almost immediately.
   // onAuthStateChange below handles INITIAL_SESSION for the definitive state.
   useEffect(() => {
-    const bootFromLocalStorage = async () => {
+    const boot = async () => {
+      // 1. Soft boot: Resolve from localStorage (no network call).
+      // This eliminates the 'booting' state almost immediately.
       const localSnapshot = await getLocalSession(supabase);
       applySnapshot(localSnapshot);
+
+      // 2. Full validation: If authenticated, verify with the server.
+      // This catches stale/expired sessions that were still in localStorage.
+      if (localSnapshot.status === "authenticated") {
+        await revalidateSession();
+      }
     };
-    void bootFromLocalStorage();
-  }, [applySnapshot, supabase]);
+    void boot();
+  }, [applySnapshot, revalidateSession, supabase]);
 
   useEffect(() => {
     if (!supabase) {
@@ -151,6 +159,16 @@ export const AuthSessionProvider: React.FC<{
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, nextSession) => {
+      // If we already have a definitive status, and this is just the INITIAL_SESSION
+      // event firing from Supabase (which only reads from localStorage), we ignore
+      // it to avoid overwriting a more precise validation status.
+      if (
+        event === "INITIAL_SESSION" &&
+        snapshot.status !== "booting"
+      ) {
+        return;
+      }
+
       if (event === "SIGNED_OUT" || !nextSession) {
         const pendingState = pendingSignedOutStateRef.current;
         pendingSignedOutStateRef.current = null;
