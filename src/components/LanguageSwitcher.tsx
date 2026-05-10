@@ -18,8 +18,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'light' }
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Get current language short code
-  const currentLang = languages.find(l => l.code === i18n.language)?.shortCode || 'EN';
+  // Get current language short code (handle regional codes like en-US)
+  const currentLang = languages.find(l => i18n.language?.startsWith(l.code))?.shortCode || 'EN';
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -76,7 +76,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'light' }
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-[200]">
           {languages.map((lang) => {
-            const isSelected = i18n.language === lang.code;
+            const isSelected = i18n.language?.startsWith(lang.code);
             return (
               <button
                 key={lang.code}
