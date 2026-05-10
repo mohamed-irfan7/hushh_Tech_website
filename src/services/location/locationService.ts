@@ -120,7 +120,14 @@ export class LocationService {
   }
 
   private getDialCodeForCountry(countryCode: string): string {
-    const code = (countryCode || '').toUpperCase();
+    let code = (countryCode || '').trim();
+    
+    // If the input is a full country name (e.g. "Pakistan"), try to map it to an ISO code first
+    if (code.length > 2) {
+      code = this.mapCountryToIsoCode(code);
+    }
+    
+    code = code.toUpperCase();
     return COUNTRY_DIAL_CODES[code] || '+1';
   }
 
@@ -779,9 +786,21 @@ export class LocationService {
     return cached !== null;
   }
 
-  /** Map country name to ISO code */
+  /** Map country name to ISO code (case-insensitive) */
   mapCountryToIsoCode(countryName: string): string {
-    return COUNTRY_NAME_TO_CODE[countryName] || countryName;
+    if (!countryName) return '';
+    const normalized = countryName.trim();
+    
+    // Try exact match first
+    if (COUNTRY_NAME_TO_CODE[normalized]) return COUNTRY_NAME_TO_CODE[normalized];
+    
+    // Case-insensitive search
+    const lowered = normalized.toLowerCase();
+    const entry = Object.entries(COUNTRY_NAME_TO_CODE).find(
+      ([name]) => name.toLowerCase() === lowered
+    );
+    
+    return entry ? entry[1] : countryName;
   }
 
   /** Map ISO code to country name */
