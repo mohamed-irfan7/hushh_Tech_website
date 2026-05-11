@@ -1,24 +1,14 @@
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaGlobe, FaAt, FaRss, FaPhone } from "react-icons/fa";
 import HushhLogo from "./images/Hushhogo.png";
-import { useAuthSession } from "../auth/AuthSessionProvider";
+
 
 export default function Footer() {
-  const { status } = useAuthSession();
-  const isLoggedIn = status === "authenticated";
+
 
   // Function to handle PDF download
-  const handleDownload = (pdfPath: string) => {
-    if (isLoggedIn) {
-      const link = document.createElement("a");
-      link.href = pdfPath;
-      link.download = pdfPath.split("/").pop() || "download";
-      link.click();
-    } else {
-      toast.error("Please log in first to access this content.");
-    }
-  };
+
 
   return (
     <footer className="relative z-10 bg-[#0B0C10] border-t border-[#1F2937]">
@@ -161,7 +151,7 @@ export default function Footer() {
               California Privacy Policy
             </a>
             <a 
-              href="/carrer-privacy-policy" 
+              href="/career-privacy-policy" 
               className="py-2 text-gray-300 hover:text-white text-base font-medium flex items-center justify-between group transition-colors duration-200"
             >
               Careers Site Privacy Notice

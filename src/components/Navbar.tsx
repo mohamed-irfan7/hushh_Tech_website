@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiMenu, FiX, FiChevronDown, FiUser, FiTrash2, FiChevronDown as FiArrowDown } from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { Image, useToast, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import hushhLogo from "../components/images/Hushhogo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import DeleteAccountModal from "./DeleteAccountModal";
-import { useStockQuotes, StockQuote, STOCK_LOGOS } from "../hooks/useStockQuotes";
+import { useStockQuotes, StockQuote } from "../hooks/useStockQuotes";
 import config from "../resources/config/config";
 import { useAuthSession } from "../auth/AuthSessionProvider";
 import { SkipToContentLink } from "./ui/SkipToContentLink";
@@ -47,21 +47,14 @@ const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boole
 };
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [toastShown, setToastShown] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
-  const [careerDropdownOpen, setCareerDropdownOpen] = useState(false);
-  const [mobileCareerDropdownOpen, setMobileCareerDropdownOpen] = useState(false);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
   const navigate = useNavigate();
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const careerDropdownRef = useRef<HTMLDivElement>(null);
-  const profileDropdownRef = useRef<HTMLDivElement>(null);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [hushhCoins, setHushhCoins] = useState<number | null>(null);
   const toast = useToast();
   const isMobile = useBreakpointValue({ base: true, lg: false });
@@ -146,7 +139,7 @@ export default function Navbar() {
 
   const primaryNavLinks = [
     { path: "/", label: t('nav.home') },
-    { path: "/about/leadership", label: t('nav.ourPhilosophy') },
+    { path: "/about/philosophy", label: t('nav.ourPhilosophy') },
     { path: "/discover-fund-a", label: t('nav.fundA') },
     { path: "/community", label: t('nav.community') },
     { path: "/a2a-playground", label: t('nav.kycStudio') },
@@ -162,23 +155,9 @@ export default function Navbar() {
 
   const isActive = (path: string) => location.pathname === path;
 
-  useEffect(() => {
-    // Handle click outside to close profile dropdown
-    const handleClickOutside = (event: MouseEvent) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
-        setProfileDropdownOpen(false);
-      }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
-  const toggleProfileDropdown = () => {
-    setProfileDropdownOpen((prev) => !prev);
-  };
+
 
   const handleAccountDeleted = () => {
     // Reset states immediately for proper UI update
@@ -192,21 +171,7 @@ export default function Navbar() {
     }, 100);
   };
 
-  // Handle scroll to check if user reached bottom of menu
-  const handleMenuScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50;
-    setShowScrollIndicator(!isNearBottom);
-  }, []);
 
-  // Check if menu needs scroll indicator when drawer opens
-  useEffect(() => {
-    if (isOpen && scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const needsScroll = container.scrollHeight > container.clientHeight;
-      setShowScrollIndicator(needsScroll);
-    }
-  }, [isOpen]);
 
   return (
     <>

@@ -77,7 +77,7 @@ import DocumentViewerPage from './pages/document-viewer';
 import NDAAdminPage from './pages/nda-admin';
 import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider';
 import AuthRequiredRoute from './components/AuthRequiredRoute';
-import HushhHackathonPage from './pages/hushh-hackathon/ui';
+
 import MetricsPage from './pages/metrics';
 import NotFound from './pages/NotFound';
 
@@ -164,7 +164,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about/leadership" element={<Leadership />} />
-            <Route path="/about/philosophy" element={<Philosophy />} />
+             <Route path="/about/philosophy" element={<Philosophy />} />
+            <Route path="/philosophy" element={<Navigate to="/about/philosophy" replace />} />
             <Route path="/Login" element={<LoginPage />} />
             <Route path="/Contact" element={<Contact />} />
             <Route path="/contact" element={<Contact />} />
@@ -181,7 +182,7 @@ function App() {
             <Route path="/career" element={<Career />} />
             <Route path="/career/*" element={<Career />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-            <Route path='/carrer-privacy-policy' element={<CareersPrivacyPolicy />} />
+            <Route path='/career-privacy-policy' element={<CareersPrivacyPolicy />} />
             <Route path="/community" element={
               <CommunityPage />
             } />
