@@ -1,15 +1,14 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiX, FiChevronDown, FiUser, FiTrash2, FiChevronDown as FiArrowDown } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { Image, useToast, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import hushhLogo from "../components/images/Hushhogo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import DeleteAccountModal from "./DeleteAccountModal";
-import { useStockQuotes, StockQuote } from "../hooks/useStockQuotes";
+import { useStockQuotes, StockQuote, STOCK_LOGOS } from "../hooks/useStockQuotes";
 import config from "../resources/config/config";
 import { useAuthSession } from "../auth/AuthSessionProvider";
-import { SkipToContentLink } from "./ui/SkipToContentLink";
 
 const WELCOME_TOAST_PENDING_KEY = "showWelcomeToast";
 const WELCOME_TOAST_USER_KEY = "showWelcomeToastUserId";
@@ -47,14 +46,21 @@ const TickerChip = ({ quote, isLoading }: { quote: StockQuote; isLoading?: boole
 };
 
 export default function Navbar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [toastShown, setToastShown] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
+  const [careerDropdownOpen, setCareerDropdownOpen] = useState(false);
+  const [mobileCareerDropdownOpen, setMobileCareerDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
   const navigate = useNavigate();
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const careerDropdownRef = useRef<HTMLDivElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [hushhCoins, setHushhCoins] = useState<number | null>(null);
   const toast = useToast();
   const isMobile = useBreakpointValue({ base: true, lg: false });
@@ -155,9 +161,23 @@ export default function Navbar() {
 
   const isActive = (path: string) => location.pathname === path;
 
+  useEffect(() => {
+    // Handle click outside to close profile dropdown
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-
+  const toggleProfileDropdown = () => {
+    setProfileDropdownOpen((prev) => !prev);
+  };
 
   const handleAccountDeleted = () => {
     // Reset states immediately for proper UI update
@@ -171,12 +191,24 @@ export default function Navbar() {
     }, 100);
   };
 
+  // Handle scroll to check if user reached bottom of menu
+  const handleMenuScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50;
+    setShowScrollIndicator(!isNearBottom);
+  }, []);
 
+  // Check if menu needs scroll indicator when drawer opens
+  useEffect(() => {
+    if (isOpen && scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const needsScroll = container.scrollHeight > container.clientHeight;
+      setShowScrollIndicator(needsScroll);
+    }
+  }, [isOpen]);
 
   return (
     <>
-      <SkipToContentLink />
-
       {/* Fixed Header with Navigation + Ticker - Light Theme */}
       <header className="fixed w-full z-[999] top-0">
         {/* Main Navigation Bar - Soft Light Background */}
@@ -193,7 +225,7 @@ export default function Navbar() {
             </div>
             {/* Brand Text - Stacked Layout */}
             <div className="flex flex-col">
-              <span className="text-[18px] font-bold leading-none tracking-tight text-gray-900">Hushh</span>
+              <h1 className="text-[18px] font-bold leading-none tracking-tight text-gray-900">Hushh</h1>
               <span className="text-[13px] text-gray-500 font-medium mt-0.5">Technologies</span>
             </div>
           </Link>
@@ -206,7 +238,6 @@ export default function Navbar() {
                 <button
                   key={path}
                   onClick={() => handleLinkClick(path)}
-                  aria-current={active ? "page" : undefined}
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     active
                       ? 'bg-[#2F80ED]/10 text-[#1f6cc7]'
@@ -295,7 +326,7 @@ export default function Navbar() {
           {lastUpdated && (
             <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-[9px] font-medium text-gray-700">
+              <span className="text-[9px] font-medium text-gray-500">
                 {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </span>
             </div>
@@ -346,7 +377,6 @@ export default function Navbar() {
                   <button
                     key={path}
                     onClick={() => handleLinkClick(path)}
-                    aria-current={isActive(path) ? "page" : undefined}
                     className="flex items-center w-full min-h-[44px] py-2.5 pr-4 pl-4 active:bg-[#E5E5EA] transition-colors relative"
                   >
                     <div
@@ -378,7 +408,6 @@ export default function Navbar() {
                   <button
                     key={path}
                     onClick={() => handleLinkClick(path)}
-                    aria-current={isActive(path) ? "page" : undefined}
                     className="flex items-center w-full min-h-[44px] py-2.5 pr-4 pl-4 active:bg-[#E5E5EA] transition-colors relative"
                   >
                     <div
