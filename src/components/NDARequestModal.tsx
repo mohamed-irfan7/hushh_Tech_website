@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -66,7 +67,9 @@ const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
   const [ndaConfirmed, setNdaConfirmed] = useState(false);
   const [ndaTermsAccepted, setNdaTermsAccepted] = useState(false);
   const [showNdaDocModal, setShowNdaDocModal] = useState(false);
+  const navigate = useNavigate();
   const toast = useToast();
+
 
   // Handle modal close if component is used as a modal
   const handleClose = () => {
@@ -198,7 +201,7 @@ const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
         
         // Redirect to profile page where NDA document modal can be shown
         // The profile page will handle showing the NDA document modal based on the status
-        window.location.href = "/profile";
+        navigate("/profile");
       } else {
         toast({ title: "Unexpected Response", description: `Received: ${resData}`, status: "error", duration: 4000, isClosable: true });
         onSubmit(resData);
