@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
     label: 'Home',
     icon: FiHome,
     path: '/',
-    matchPaths: ['/our-philosophy'],
+    matchPaths: ['/about/philosophy'],
   },
   {
     id: 'fund',
@@ -44,7 +44,7 @@ const navItems: NavItem[] = [
     label: 'Profile',
     icon: FiUser,
     path: '/hushh-user-profile',
-    matchPaths: ['/contact', '/faq'],
+    matchPaths: [],
   },
 ];
 
@@ -57,7 +57,6 @@ const hiddenOnPages = [
   '/kyc-flow',
   '/kyc-demo',
   '/a2a-playground',
-  '/hushh-user-profile', // Hide nav on profile page for better UX (like onboarding)
 ];
 
 // Framer Motion variants for entrance animation
@@ -102,12 +101,12 @@ const MobileBottomNav: React.FC = () => {
   const location = useLocation();
 
   // Check if current page should hide the nav
-  const shouldHideNav = hiddenOnPages.some(page => 
+  const shouldHideNav = hiddenOnPages.some(page =>
     location.pathname.toLowerCase().startsWith(page.toLowerCase())
   );
 
   // Check if we're on a full-screen community post
-  const isFullScreenPost = location.pathname.startsWith('/community/') && 
+  const isFullScreenPost = location.pathname.startsWith('/community/') &&
     location.pathname !== '/community';
 
   if (shouldHideNav || isFullScreenPost) {
@@ -205,7 +204,7 @@ const MobileBottomNav: React.FC = () => {
                   transition="all 0.2s ease"
                 />
               </Flex>
-              
+
               {/* Label */}
               <Text
                 fontSize="11px"
