@@ -156,7 +156,7 @@ function App() {
   const AppLayout = () => {
     const { showNavbar, showFooter, showMobileNav } = useLayoutVisibility();
     const { session } = useAuthSession();
-    
+
     return (
       <div className="min-h-screen flex flex-col">
         {showNavbar && <Navbar />}
@@ -166,7 +166,6 @@ function App() {
             <Route path="/about/leadership" element={<Leadership />} />
             <Route path="/about/philosophy" element={<Philosophy />} />
             <Route path="/Login" element={<LoginPage />} />
-            <Route path="/Contact" element={<Contact />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/benefits" element={<BenefitsPage />} />
             <Route path='/services/consumers' element={<Consumers />} />
@@ -178,16 +177,14 @@ function App() {
                 <Profile />
               </AuthRequiredRoute>
             } />
-            <Route path="/career" element={<Career />} />
             <Route path="/career/*" element={<Career />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-            <Route path='/carrer-privacy-policy' element={<CareersPrivacyPolicy />} />
+            <Route path='/career-privacy-policy' element={<CareersPrivacyPolicy />} />
             <Route path="/community" element={
               <CommunityPage />
             } />
             <Route path='/california-privacy-policy' element={<CaliforniaPrivacyPolicy />} />
             <Route path='/eu-uk-jobs-privacy-policy' element={<EUUKPrivacyPolicy />} />
-            <Route path='/terms' element={<TermsOfService />} />
             <Route path='/terms-of-service' element={<TermsOfService />} />
             <Route path='/delete-account' element={
               <AuthRequiredRoute>
