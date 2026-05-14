@@ -80,6 +80,8 @@ import AuthRequiredRoute from './components/AuthRequiredRoute';
 import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
 import NotFound from './pages/NotFound';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
 
@@ -390,6 +392,7 @@ function App() {
             {/* 404 Not Found - Must be last route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ToastContainer position="top-right" autoClose={3000} />
         </ContentWrapper>
         {showFooter && <Footer />}
         {showMobileNav && <MobileBottomNav />}

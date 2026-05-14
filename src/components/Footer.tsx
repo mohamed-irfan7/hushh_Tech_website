@@ -1,5 +1,4 @@
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { FaGlobe, FaAt, FaRss, FaPhone } from "react-icons/fa";
 import HushhLogo from "./images/Hushhogo.png";
 import { useAuthSession } from "../auth/AuthSessionProvider";
@@ -216,7 +215,7 @@ export default function Footer() {
       <div className="h-6 w-full"></div>
 
       {/* Toast Notification Container */}
-      <ToastContainer position="top-right" autoClose={3000} />
+      
     </footer>
   );
 }
