@@ -303,7 +303,7 @@ export default function Navbar() {
 
         {/* Chip-based Ticker Strip - BELOW Navigation (hidden on onboarding & profile pages) */}
         {!hideTicker && (
-        <section className="relative w-full bg-[#F8F9FA] py-2.5 border-b border-gray-200">
+          <section aria-label="Live stock ticker" className="relative w-full bg-[#F8F9FA] py-2.5 border-b border-gray-200">
           {/* Ticker Marquee with Fade Mask */}
           <div className="ticker-mask relative flex w-full overflow-hidden">
             <div className="ticker-track flex items-center gap-3 px-4">
