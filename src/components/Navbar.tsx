@@ -555,7 +555,7 @@ export default function Navbar() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleLinkClick("/Login")}
+                    onClick={() => handleLinkClick("/login")}
                     className="w-full h-[50px] rounded-[12px] bg-[#007AFF] text-white font-semibold text-[17px] active:scale-[0.98] active:opacity-90 transition-all flex items-center justify-center shadow-sm"
                   >
                     {t('nav.login')}
