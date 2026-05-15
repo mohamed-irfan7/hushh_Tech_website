@@ -86,7 +86,7 @@ const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
 // Content wrapper component that applies conditional margin
 const ContentWrapper = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/' || location.pathname === '/signUp' || location.pathname === '/solutions';
+  const isHomePage = location.pathname === '/' || location.pathname === '/signUp';
   const isAuthCallback = location.pathname.startsWith('/auth/callback');
   const isUserRegistration = location.pathname === '/user-registration';
   const isOnboarding = location.pathname.startsWith('/onboarding');
