@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/home/ui';
 import Leadership from './components/Leadership';
@@ -81,6 +81,7 @@ import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
 import NotFound from './pages/NotFound';
 
+
 const KaiIndiaApp = React.lazy(() => import('./kai-india/pages'));
 
 // Content wrapper component that applies conditional margin
@@ -156,6 +157,7 @@ function App() {
   const AppLayout = () => {
     const { showNavbar, showFooter, showMobileNav } = useLayoutVisibility();
     const { session } = useAuthSession();
+    const navigate = useNavigate();
     
     return (
       <div className="min-h-screen flex flex-col">
@@ -333,7 +335,7 @@ function App() {
                     // Handle post-submission actions here
                     if (result === "Approved" || result === "Pending" || result === "Requested permission") {
                       // Redirect to appropriate page on success
-                      window.location.href = "/";
+                       navigate("/");
                     }
                   }}
                 />
