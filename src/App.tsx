@@ -171,7 +171,7 @@ function App() {
             <Route path="/benefits" element={<BenefitsPage />} />
             <Route path='/services/consumers' element={<Consumers />} />
             <Route path='/services/business' element={<Business />} />
-            <Route path='/Signup' element={<SignupPage />} />
+            <Route path='/signup' element={<SignupPage />} />
             <Route path='/faq' element={<Faq />} />
             <Route path='/profile' element={
               <AuthRequiredRoute>
