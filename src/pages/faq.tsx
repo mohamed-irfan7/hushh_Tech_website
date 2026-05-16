@@ -133,6 +133,7 @@ const FaqPage: React.FC = () => {
           maxW="4xl"
           mx="auto"
           w="100%"
+          role="list"
         >
           {faqs.map((faq, index: number) => {
             const isOpen = openIndex === index;
@@ -142,6 +143,7 @@ const FaqPage: React.FC = () => {
             return (
             <Box
               key={index}
+              role="listitem"
               bg="white"
               borderRadius="2xl"
               overflow="hidden"
