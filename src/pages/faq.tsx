@@ -209,6 +209,9 @@ const FaqPage: React.FC = () => {
                       display="block"
                       flex="1"
                       pr={1}
+                      minW={0}
+                      overflowWrap="anywhere"
+                      wordBreak="normal"
                       transition="color 0.2s ease"
                       _groupHover={{ color: "black" }}
                     >
