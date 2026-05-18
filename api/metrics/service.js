@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { google } from "googleapis";
+import WebSocket from "ws";
 
 const ANALYTICS_SCOPE = "https://www.googleapis.com/auth/analytics.readonly";
 const SEARCH_CONSOLE_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly";
@@ -407,6 +408,9 @@ function createSupabaseAdminClient(url, serviceRoleKey) {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
+    },
+    realtime: {
+      transport: WebSocket,
     },
   });
 }
@@ -2080,6 +2084,7 @@ export async function buildMetricsSummary(options = {}) {
 export const __testing = {
   buildFunnel,
   buildSearchPerformanceReport,
+  createSupabaseAdminClient,
   fetchSiteAnalytics,
   fetchSearchPerformanceMetrics,
   fetchSupabaseStackMetrics,
