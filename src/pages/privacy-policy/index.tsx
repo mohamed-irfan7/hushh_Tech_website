@@ -202,7 +202,7 @@ const PrivacyPolicyPage: React.FC = () => {
           <Text>
             For questions regarding this Policy, please contact{" "}
            <Text as="a" href="mailto:ir@hushh.ai" fontWeight="500" color="blue.500">
-            ir@hushh.ai
+             ir@hushh.ai
            </Text>
             .
           </Text>
