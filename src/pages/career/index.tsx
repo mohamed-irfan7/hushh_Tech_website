@@ -272,7 +272,6 @@ const CareerList = () => {
           _hover={{ bgGradient: "linear-gradient(to right, #0098cc, #5BC0DC)" }}
           boxShadow="md"
           height="auto"
-          className="benefits-button"
           {...jobCardFocusVisible}
         >
           View Full Benefits Package
