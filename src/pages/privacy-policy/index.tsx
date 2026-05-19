@@ -201,8 +201,8 @@ const PrivacyPolicyPage: React.FC = () => {
           </Heading>
           <Text>
             For questions regarding this Policy, please contact{" "}
-            <Text as="span" fontWeight="500">
-            ir@hushh.ai
+            <Text as="a" href="mailto:ir@hushh.ai" fontWeight="500" color="blue.500">
+              ir@hushh.ai
             </Text>
             .
           </Text>
