@@ -251,7 +251,7 @@ const BenefitsPage: React.FC = () => {
           </section>
 
           {/* Why Join Hushh Technologies? — home-style CTA card + primary black button */}
-          <section className="mx-auto w-full max-w-3xl rounded-2xl border border-gray-200/60 bg-ios-gray-bg p-6 text-center transition-colors hover:border-hushh-blue/30 sm:p-8 lg:col-span-2">
+          <section aria-label="Why join Hushh Technologies" className="mx-auto w-full max-w-3xl rounded-2xl border border-gray-200/60 bg-ios-gray-bg p-6 text-center transition-colors hover:border-hushh-blue/30 sm:p-8 lg:col-span-2">
             <h2
               className="mb-3 text-xl font-medium tracking-tight text-black sm:mb-4 sm:text-3xl md:text-4xl"
               style={playfair}
