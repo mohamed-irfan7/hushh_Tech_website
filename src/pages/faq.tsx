@@ -198,7 +198,6 @@ const FaqPage: React.FC = () => {
                     _active={{
                       bg: "gray.100",
                     }}
-                    _focus={{ outline: "none" }}
                     _focusVisible={{
                       boxShadow:
                         "inset 0 0 0 1px rgba(0, 0, 0, 0.04), 0 0 0 3px rgba(0, 169, 224, 0.45)",
