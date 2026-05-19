@@ -15,7 +15,7 @@ export default function NotFound() {
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-16 sm:px-8 lg:px-12">
         <div className="grid w-full gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:items-center">
-          <section className="max-w-2xl">
+         <section aria-label="Page not found" className="max-w-2xl">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur">
               <img
                 src={hushhLogo}
